@@ -5,3 +5,13 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+
+companies = FactoryGirl.create_list(:company, 10)
+
+companies.each do |company|
+  FactoryGirl.create_list(:customer, rand(10) + 10, company: company)
+end
+
+Customer.all.each do |customer|
+  FactoryGirl.create_list(:offer, rand(10) + 20, customer: customer)
+end
