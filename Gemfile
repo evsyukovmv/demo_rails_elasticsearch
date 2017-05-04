@@ -33,13 +33,19 @@ gem 'jbuilder', '~> 2.5'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
+# Elasticsearch
+gem 'elasticsearch-model'
+gem 'elasticsearch-rails'
+
+gem 'faker'
+
 group :development, :test do
   gem 'pry-byebug'
   # Adds support for Capybara system testing and selenium driver
   gem 'capybara', '~> 2.13.0'
-  gem 'selenium-webdriver'
-  gem 'rspec-rails', '~> 3.5'
   gem 'factory_girl_rails'
+  gem 'rspec-rails', '~> 3.5'
+  gem 'selenium-webdriver'
 end
 
 group :test do

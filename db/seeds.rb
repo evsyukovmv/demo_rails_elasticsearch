@@ -5,6 +5,9 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+require 'faker'
+
+puts '=' * 10, 'seeds started', '=' * 10
 
 companies = FactoryGirl.create_list(:company, 10)
 
@@ -15,3 +18,5 @@ end
 Customer.all.each do |customer|
   FactoryGirl.create_list(:offer, rand(10) + 20, customer: customer)
 end
+
+puts '=' * 10, 'seeds finished', '=' * 10
