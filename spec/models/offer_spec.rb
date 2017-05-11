@@ -12,7 +12,7 @@ RSpec.describe Offer, type: :model do
 
   context 'search' do
     let!(:offers) { FactoryGirl.create_list(:offer, 2) }
-    let(:offer) { offers.sample }
+    let!(:offer) { offers.sample }
 
     before(:each) do
       Offer.__elasticsearch__.client.indices.flush

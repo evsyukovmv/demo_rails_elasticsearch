@@ -30,6 +30,11 @@ gem 'jbuilder', '~> 2.5'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
+gem 'will_paginate'
+gem 'bootstrap-sass'
+gem 'jquery-rails'
+gem 'twitter-typeahead-rails'
+
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
