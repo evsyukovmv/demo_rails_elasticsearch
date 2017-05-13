@@ -1,20 +1,30 @@
 env:
   CODECLIMATE_REPO_TOKEN: 03884e44e7bd728d4eb61fcc6246af1dae130ddf9c275998f013567325cfb31d
 
+sudo: true
+
 language: ruby
 rvm:
   - 2.4.0
 
+addons:
+  apt:
+    packages:
+      - oracle-java8-set-default
+
 services:
   - mysql
-  - elasticsearch
 
 before_install:
   - mysql -e 'CREATE DATABASE IF NOT EXISTS demo_rails_elasticsearch_test;'
+  - curl -O https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-5.3.0.deb
+  - sudo dpkg -i --force-confnew elasticsearch-5.3.0.deb
+  - sudo service elasticsearch start
 
 before_script:
   - cp config/database.travis.yml config/database.yml
   - sleep 10
+  - curl -XGET 'localhost:9200'
 
 script:
   - bin/rake db:migrate RAILS_ENV=test

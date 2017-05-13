@@ -30,9 +30,9 @@ class Offer < ApplicationRecord
     mappings dynamic: 'false' do
       indexes :title, analyzer: 'english'
       indexes :description, analyzer: 'english'
-      indexes :customer do 
+      indexes :customer do
         indexes :name, analyzer: 'english'
-        indexes :company do 
+        indexes :company do
           indexes :name, analyzer: 'english'
         end
       end
