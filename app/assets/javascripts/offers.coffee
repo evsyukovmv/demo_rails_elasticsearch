@@ -22,8 +22,8 @@ ready = ->
   $('.offers-search').keyup (e) ->
     if e.keyCode == 13
       value = $(e.target).val()
-      if value.length > 0 
-        window.location.search = '?query=' + value 
+      if value.length > 0
+        window.location.search = '?query=' + value
       else
         window.location.search = ''
     return
