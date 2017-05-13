@@ -1,0 +1,5 @@
+test:
+  adapter: mysql2
+  database: demo_rails_elasticsearch_test
+  username: travis
+  encoding: utf8
