@@ -1,6 +1,7 @@
 class OffersController < ApplicationController
   def index
-    @offers = params[:query].present? ? Offer.search(params[:query]) : Offer
+    @query = params[:query]
+    @offers = @query.present? ? Offer.search(@query) : Offer
     @offers = @offers.paginate(page: params[:page])
   end
 

@@ -2,8 +2,10 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
-$ -> 
-  $('.typeahead').typeahead {
+ready = ->
+  window.location.search.match(/query=[^&]+/)
+
+  $('.offers-search').typeahead {
     hint: true
     highlight: true
     minLength: 1,
@@ -13,13 +15,18 @@ $ ->
       $.get '/offers/autocomplete', { query: query }, (data) ->
         async data
 
-  $('.typeahead').bind 'typeahead:select', (e, suggestion) ->
-    search = window.location.search
-    if search.length > 0
-      if search.search('query')
-        window.location.search = search.replace(/query=[^&]+/, 'query=' + suggestion)
+  $('.offers-search').bind 'typeahead:select', (e, suggestion) ->
+    window.location.search = '?query=' + suggestion
+    return true
+
+  $('.offers-search').keyup (e) ->
+    if e.keyCode == 13
+      value = $(e.target).val()
+      if value.length > 0 
+        window.location.search = '?query=' + value 
       else
-        window.location.search = search + '&query=' + suggestion
-    else
-      window.location.search = '?query=' + suggestion
+        window.location.search = ''
     return
+
+$(document).on('turbolinks:load', ready)
+

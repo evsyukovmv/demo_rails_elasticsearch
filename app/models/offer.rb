@@ -10,8 +10,8 @@ class Offer < ApplicationRecord
   after_touch() { __elasticsearch__.index_document }
 
   def as_indexed_json(_options = {})
-    title_suggest = {
-      title_suggest: {
+    fields_suggest = {
+      fields_suggest: {
         input: [title, description, customer.name, customer.company.name]
       }
     }
@@ -22,7 +22,7 @@ class Offer < ApplicationRecord
           methods: :name, only: :name, include: { company: { only: :name } }
         }
       }
-    ).merge(title_suggest)
+    ).merge(fields_suggest)
     all
   end
 
@@ -36,17 +36,15 @@ class Offer < ApplicationRecord
           indexes :name, analyzer: 'english'
         end
       end
-      indexes :title_suggest, type: 'completion'
+      indexes :fields_suggest, type: 'completion'
     end
   end
 
   def self.suggest query
-    __elasticsearch__.client.suggest(:index => index_name, :body => {
-      :suggestions => {
-        :text => query,
-        :completion => {
-          :field => 'title_suggest'
-        }
+    __elasticsearch__.client.suggest(index: index_name, body: {
+      suggestions: {
+        text: query,
+        completion: { field: 'fields_suggest' }
       }
     })
   end

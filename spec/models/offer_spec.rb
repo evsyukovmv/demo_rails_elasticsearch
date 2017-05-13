@@ -42,4 +42,22 @@ RSpec.describe Offer, type: :model do
       expect(search.records[0]).to eql offer
     end
   end
+
+  context 'suggest' do
+    let!(:offers) { FactoryGirl.create_list(:offer, 2) }
+    let!(:offer) { offers.sample }
+
+    before(:each) do
+      Offer.__elasticsearch__.client.indices.flush
+    end
+
+    it 'should return suggestions' do
+      suggestions = Offer.suggest(
+        offer.customer.company.name
+      )['suggestions'][0]['options']
+      expect(suggestions.size).to eql 1
+      expect(suggestions[0]['text']).to eql offer.customer.company.name
+      expect(suggestions[0]['_id']).to eql offer.id.to_s
+    end
+  end
 end
