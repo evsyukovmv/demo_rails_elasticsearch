@@ -29,9 +29,9 @@ class Offer < ApplicationRecord
   settings index: { number_of_shards: 1 } do
     mappings dynamic: 'false' do
       indexes :title, analyzer: 'english'
-      indexes :description, analyzer: 'english'
       indexes :customer do
         indexes :name, analyzer: 'english'
+        indexes :description, analyzer: 'english'
         indexes :company do
           indexes :name, analyzer: 'english'
         end
@@ -40,20 +40,31 @@ class Offer < ApplicationRecord
     end
   end
 
-  def self.suggest query
-    __elasticsearch__.client.suggest(index: index_name, body: {
-      suggestions: {
-        text: query,
-        completion: { field: 'fields_suggest' }
+  def self.suggest(query)
+    __elasticsearch__.client.suggest(
+      index: index_name,
+      body: {
+        suggestions: {
+          text: query,
+          completion: { field: 'fields_suggest' }
+        }
       }
-    })
+    )
+  end
+
+  def self.elasticsearch_reindex
+    delete_index
+    create_indicies
+    includes(customer: :company).import
+  end
+
+  def self.delete_indicies
+    __elasticsearch__.client.indices.delete index: index_name
+  end
+
+  def self.create_indicies
+    __elasticsearch__.client.indices.create \
+      index: index_name,
+      body: { settings: settings.to_hash, mappings: mappings.to_hash }
   end
 end
-
-Offer.__elasticsearch__.client.indices.delete index: Offer.index_name rescue nil
-
-Offer.__elasticsearch__.client.indices.create \
-  index: Offer.index_name,
-  body: { settings: Offer.settings.to_hash, mappings: Offer.mappings.to_hash }
-
-Offer.includes(customer: :company).import

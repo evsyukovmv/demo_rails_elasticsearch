@@ -10,48 +10,32 @@ RSpec.describe Offer, type: :model do
     it { should belong_to(:customer) }
   end
 
-  context 'search' do
-    let!(:offers) { FactoryGirl.create_list(:offer, 2) }
-    let!(:offer) { offers.sample }
+  context 'elasticsearch' do
+    let(:offers) { FactoryGirl.create_list(:offer, 2) }
 
     before(:each) do
-      Offer.__elasticsearch__.client.indices.flush
+      Offer.delete_indicies rescue nil
+      Offer.create_indicies
+      offers
+      Offer.import
+      sleep 2
     end
 
-    it 'should search by title' do
-      search = Offer.search(offer.title)
-      expect(search.records.size).to eql 1
-      expect(search.records[0]).to eql offer
-    end
-
-    it 'should search by description' do
-      search = Offer.search(offer.description)
-      expect(search.records.size).to eql 1
-      expect(search.records[0]).to eql offer
-    end
-
-    it 'should search by customer name' do
-      search = Offer.search(offer.customer.first_name)
-      expect(search.records.size).to eql 1
-      expect(search.records[0]).to eql offer
-    end
-
-    it 'should search by company name' do
-      search = Offer.search(offer.customer.company.name)
-      expect(search.records.size).to eql 1
-      expect(search.records[0]).to eql offer
-    end
-  end
-
-  context 'suggest' do
-    let!(:offers) { FactoryGirl.create_list(:offer, 2) }
-    let!(:offer) { offers.sample }
-
-    before(:each) do
-      Offer.__elasticsearch__.client.indices.flush
+    it 'should search by fields' do
+      [
+        'title',
+        'customer.first_name',
+        'customer.company.name'
+      ].each do |field|
+        offer = offers.sample
+        search = Offer.search(offer.instance_eval(field))
+        expect(search.records.size).to eql 1
+        expect(search.records[0]).to eql offer
+      end
     end
 
     it 'should return suggestions' do
+      offer = offers.sample
       suggestions = Offer.suggest(
         offer.customer.company.name
       )['suggestions'][0]['options']

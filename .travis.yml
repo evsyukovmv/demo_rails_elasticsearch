@@ -28,4 +28,4 @@ before_script:
 
 script:
   - bin/rake db:migrate RAILS_ENV=test
-  - bin/rake
+  - bundle exec rspec spec/ && bundle exec codeclimate-test-reporter
