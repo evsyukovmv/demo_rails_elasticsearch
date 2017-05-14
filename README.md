@@ -1,24 +1,7 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+[![Build Status](https://travis-ci.org/evsyukovmv/demo_rails_elasticsearch.svg?branch=master)](https://travis-ci.org/evsyukovmv/demo_rails_elasticsearch)
 
-Things you may want to cover:
+[![Code Climate](https://codeclimate.com/github/evsyukovmv/demo_rails_elasticsearch/badges/gpa.svg)](https://codeclimate.com/github/evsyukovmv/demo_rails_elasticsearch)
 
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+[![Test Coverage](https://codeclimate.com/github/evsyukovmv/demo_rails_elasticsearch/badges/coverage.svg)](https://codeclimate.com/github/evsyukovmv/demo_rails_elasticsearch/coverage)
