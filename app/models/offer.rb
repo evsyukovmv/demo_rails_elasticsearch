@@ -67,4 +67,10 @@ class Offer < ApplicationRecord
       index: index_name,
       body: { settings: settings.to_hash, mappings: mappings.to_hash }
   end
+
+  def self.create_indicies_and_import
+    Offer.delete_indicies rescue nil
+    Offer.create_indicies
+    Offer.import
+  end
 end

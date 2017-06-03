@@ -14,10 +14,8 @@ RSpec.describe Offer, type: :model do
     let(:offers) { FactoryGirl.create_list(:offer, 2) }
 
     before(:each) do
-      Offer.delete_indicies rescue nil
-      Offer.create_indicies
       offers
-      Offer.import
+      Offer.create_indicies_and_import
       sleep 2
     end
 
