@@ -27,7 +27,6 @@ RSpec.describe Offer, type: :model do
       ].each do |field|
         offer = offers.sample
         search = Offer.search(offer.instance_eval(field))
-        expect(search.records.size).to eql 1
         expect(search.records[0]).to eql offer
       end
     end
@@ -37,7 +36,6 @@ RSpec.describe Offer, type: :model do
       suggestions = Offer.suggest(
         offer.customer.company.name
       )['suggestions'][0]['options']
-      expect(suggestions.size).to eql 1
       expect(suggestions[0]['text']).to eql offer.customer.company.name
       expect(suggestions[0]['_id']).to eql offer.id.to_s
     end
