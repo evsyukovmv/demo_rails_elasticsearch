@@ -3,12 +3,10 @@
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
 ready = ->
-  window.location.search.match(/query=[^&]+/)
-
-  $('.offers-search').typeahead {
+  $('#offers-search').typeahead {
     hint: true
     highlight: true
-    minLength: 1,
+    minLength: 1
     async: true
   },
     source: (query, sync, async) ->
@@ -27,6 +25,23 @@ ready = ->
       else
         window.location.search = ''
     return
+
+  $('.customers-search').typeahead {
+    hint: true
+    highlight: true
+    minLength: 1
+    async: true
+  },
+    source: (query, sync, async) ->
+      $.get '/customers/autocomplete', { query: query }, (data) ->
+        async data
+
+    display: (data) ->
+      data.text
+
+  $('.customers-search').bind 'typeahead:select', (e, suggestion) ->
+    $('#offer_customer_id').val(suggestion.id)
+    return true
 
 $(document).on('turbolinks:load', ready)
 

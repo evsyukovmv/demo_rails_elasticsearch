@@ -2,12 +2,23 @@ require 'elasticsearch/model'
 
 class Offer < ApplicationRecord
   include Elasticsearch::Model
-  include Elasticsearch::Model::Callbacks
 
   validates :title, :customer, presence: true
   belongs_to :customer
 
-  after_touch() { __elasticsearch__.index_document }
+  after_touch { __elasticsearch__.index_document }
+
+  after_commit on: [:create] do
+    __elasticsearch__.index_document
+  end
+
+  after_commit on: [:update] do
+    __elasticsearch__.index_document
+  end
+
+  after_commit on: [:destroy] do
+    __elasticsearch__.delete_document
+  end
 
   def as_indexed_json(_options = {})
     fields_suggest = {
@@ -53,7 +64,7 @@ class Offer < ApplicationRecord
   end
 
   def self.elasticsearch_reindex
-    delete_index
+    delete_indicies rescue nil
     create_indicies
     includes(customer: :company).import
   end
@@ -66,11 +77,5 @@ class Offer < ApplicationRecord
     __elasticsearch__.client.indices.create \
       index: index_name,
       body: { settings: settings.to_hash, mappings: mappings.to_hash }
-  end
-
-  def self.create_indicies_and_import
-    Offer.delete_indicies rescue nil
-    Offer.create_indicies
-    Offer.import
   end
 end

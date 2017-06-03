@@ -15,7 +15,7 @@ RSpec.describe Offer, type: :model do
 
     before(:each) do
       offers
-      Offer.create_indicies_and_import
+      Offer.elasticsearch_reindex
       sleep 2
     end
 
