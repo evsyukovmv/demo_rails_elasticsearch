@@ -1,9 +1,6 @@
 class CompaniesController < ApplicationController
   def index
-    @query = params[:query]
-    @companies = Company.search("*#{@query}*").records if @query.present?
-    @companies ||= Company
-    @companies = @companies.paginate(page: params[:page])
+    @companies = search_records
   end
 
   def new
@@ -45,9 +42,7 @@ class CompaniesController < ApplicationController
   end
 
   def suggestions
-    suggestions = Company.suggest(params[:query])
-    options = suggestions['suggestions'][0]['options']
-    render json: options.map { |s| s['text'] }.uniq
+    render json: suggest_records
   end
 
   private

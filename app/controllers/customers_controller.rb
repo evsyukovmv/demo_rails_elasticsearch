@@ -1,9 +1,6 @@
 class CustomersController < ApplicationController
     def index
-    @query = params[:query]
-    @customers = Customer.search("*#{@query}*").records if @query
-    @customers ||= Customer
-    @customers = @customers.paginate(page: params[:page])
+    @customers = search_records
   end
 
   def new
@@ -45,9 +42,7 @@ class CustomersController < ApplicationController
   end
 
   def suggestions
-    suggestions = Customer.suggest(params[:query])
-    options = suggestions['suggestions'][0]['options']
-    render json: options.map { |s| s['text'] }.uniq
+    render json: suggest_records
   end
 
   private

@@ -1,9 +1,6 @@
 class OffersController < ApplicationController
   def index
-    @query = params[:query]
-    @offers = Offer.search("*#{@query}*").records if @query.present?
-    @offers ||= Offer
-    @offers = @offers.paginate(page: params[:page])
+    @offers = search_records
   end
 
   def new
@@ -39,9 +36,7 @@ class OffersController < ApplicationController
   end
 
   def suggestions
-    suggestions = Offer.suggest(params[:query])
-    options = suggestions['suggestions'][0]['options']
-    render json: options.map { |s| s['text'] }.uniq
+    render json: suggest_records
   end
 
   private
