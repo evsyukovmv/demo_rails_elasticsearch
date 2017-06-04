@@ -9,12 +9,14 @@ rvm:
 
 addons:
   firefox: "47.0"
+
   apt:
     packages:
       - oracle-java8-set-default
 
 services:
   - mysql
+  - redis-server
 
 before_install:
   - mysql -e 'CREATE DATABASE IF NOT EXISTS demo_rails_elasticsearch_test;'

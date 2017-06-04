@@ -7,17 +7,17 @@ module Searchable
   included do
     after_touch do 
       __elasticsearch__.index_document
-      touch_dependencies
+      TouchDependenciesWorker.perform_async(self.class, id)
     end
 
     after_commit on: [:create, :update] do
       __elasticsearch__.index_document
-      touch_dependencies
+      TouchDependenciesWorker.perform_async(self.class, id)
     end
 
     after_commit on: [:destroy] do
       __elasticsearch__.delete_document
-      touch_dependencies
+      TouchDependenciesWorker.perform_async(self.class, id)
     end
 
     def self.suggest(query)

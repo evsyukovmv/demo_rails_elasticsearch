@@ -44,6 +44,8 @@ gem 'elasticsearch-rails'
 
 gem 'faker'
 
+gem 'sidekiq'
+
 group :development, :test do
   gem 'pry-byebug'
   # Adds support for Capybara system testing and selenium driver
