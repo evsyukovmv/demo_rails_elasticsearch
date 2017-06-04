@@ -6,6 +6,7 @@ feature 'Create offer', js: true do
 
   scenario 'Visitor can create an offer' do
     Customer.elasticsearch_reindex
+    sleep 2
     visit root_path
     find('.create-offer').click
     expect(page).to have_css '.offer-form'

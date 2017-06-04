@@ -6,6 +6,7 @@ feature 'Create customer', js: true do
 
   scenario 'Visitor can create an customer' do
     Company.elasticsearch_reindex
+    sleep 2
     visit customers_path
     find('.create-customer').click
     expect(page).to have_css '.customer-form'
