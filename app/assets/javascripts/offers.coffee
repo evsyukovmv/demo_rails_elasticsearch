@@ -1,5 +1,6 @@
 offersTableReady =->
   return false if $('.offers-table').length == 0
+  $('.navbar-offers').addClass('active')
   $('#offers-search').typeahead {
     hint: true
     highlight: true
@@ -25,6 +26,7 @@ offersTableReady =->
 
 offersManageReady =->
   return false if $('.offer-form').length == 0
+  $('.navbar-offers').addClass('active')
   $('.customers-search').typeahead {
     hint: true
     highlight: true

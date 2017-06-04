@@ -1,5 +1,6 @@
 companiesTableReady =->
   return false if $('.companies-table').length == 0
+  $('.navbar-companies').addClass('active')
   $('#companies-search').typeahead {
     hint: true
     highlight: true
@@ -25,6 +26,7 @@ companiesTableReady =->
 
 companiesManageReady =->
   return false if $('.company-form').length == 0
+  $('.navbar-companies').addClass('active')
 
 companiesReady = ->
   companiesTableReady()

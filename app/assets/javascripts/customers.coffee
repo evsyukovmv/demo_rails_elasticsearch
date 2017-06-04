@@ -1,5 +1,6 @@
 customersTableReady =->
   return false if $('.customers-table').length == 0
+  $('.navbar-customers').addClass('active')
   $('#customers-search').typeahead {
     hint: true
     highlight: true
@@ -25,6 +26,7 @@ customersTableReady =->
 
 customersManageReady =->
   return false if $('.customer-form').length == 0
+  $('.navbar-customers').addClass('active')
   $('#company-autocomplete').typeahead {
     hint: true
     highlight: true
