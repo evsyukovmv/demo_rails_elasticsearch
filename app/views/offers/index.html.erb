@@ -3,10 +3,10 @@
     <h2>Offers</h1>
   </div>
   <div class="col-md-3">
-    <input type="text" value="<%= @query %>" id="offers-search" class="form-control typeahead offers-search pull-right" placeholder="Search" />
+    <input type="text" value="<%= @query %>" id="offers-search" class="form-control typeahead input-search pull-right" placeholder="Search" />
   </div>
   <div class="col-md-1">
-    <%= link_to "Create", new_offer_path, class: 'create-offer btn btn-primary pull-right' %>
+    <%= link_to "Create", new_offer_path, class: 'create-item create-offer btn btn-primary pull-right' %>
   </div>
 </div>
 <div class="row">
@@ -19,7 +19,7 @@
         <th>Description</th>
         <th>Customer</th>
         <th>Company</th>
-        <th></th>
+        <th>Actions</th>
       </tr>
       </thead>
       <tbody>

@@ -1,29 +1,14 @@
+require 'elasticsearch/model'
+
 class Customer < ApplicationRecord
   include Elasticsearch::Model
+  include Searchable
 
   validates :first_name, :last_name, :company, presence: true
   belongs_to :company
   has_many :offers
 
-  after_touch do
-     __elasticsearch__.index_document
-     offers.find_each(&:touch)
-  end
-
-  after_commit on: [:create] do
-    __elasticsearch__.index_document
-    offers.find_each(&:touch)
-  end
-
-  after_commit on: [:update] do
-    __elasticsearch__.index_document
-    offers.find_each(&:touch)
-  end
-
-  after_commit on: [:destroy] do
-    __elasticsearch__.delete_document
-    offers.find_each(&:touch)
-  end
+  default_scope { includes(:company).order(id: :desc) }
 
   def name
     "#{first_name} #{last_name}"
@@ -34,8 +19,16 @@ class Customer < ApplicationRecord
   end
 
   def as_indexed_json(_options = {})
-    as_json \
+    suggest_fields = {
+      suggest_fields: {
+        input: [first_name, last_name, company.name]
+      }
+    }
+
+    fields = as_json(
       include: { company: { only: :name } }, only: [:first_name, :last_name]
+    ).merge(suggest_fields)
+    fields
   end
 
   settings index: { number_of_shards: 1 } do
@@ -45,22 +38,11 @@ class Customer < ApplicationRecord
       indexes :company do
         indexes :name, analyzer: 'english'
       end
+      indexes :suggest_fields, type: 'completion'
     end
   end
 
-  def self.elasticsearch_reindex
-    delete_indicies rescue nil
-    create_indicies
-    includes(:company).import
-  end
-
-  def self.delete_indicies
-    __elasticsearch__.client.indices.delete index: index_name
-  end
-
-  def self.create_indicies
-    __elasticsearch__.client.indices.create \
-      index: index_name,
-      body: { settings: settings.to_hash, mappings: mappings.to_hash }
+  def touch_dependencies
+    offers.find_each(&:touch)
   end
 end

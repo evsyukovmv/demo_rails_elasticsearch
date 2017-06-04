@@ -1,0 +1,44 @@
+<div class="row">
+  <div class="col-md-8">
+    <h2>Companies</h1>
+  </div>
+  <div class="col-md-3">
+    <input type="text" value="<%= @query %>" id="companies-search" class="form-control typeahead input-search pull-right" placeholder="Search" />
+  </div>
+  <div class="col-md-1">
+    <%= link_to "Create", new_company_path, class: 'create-company create-item btn btn-primary pull-right' %>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <table class="table table-hover companies-table">
+      <thead>
+      <tr>
+        <th>Id</th>
+        <th>Name</th>
+        <th>Address</th>
+        <th>Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <% @companies.each do |company| %>
+          <tr>
+            <td><%= company.id %></td>
+            <td><%= company.name %></td>
+            <td><%= company.address %></td>
+            <td>
+              <%= link_to "Edit", edit_company_path(company.id), class: 'company-edit' %>
+              |
+              <%= link_to 'Destroy', company, method: :delete, class: 'company-destroy' %>
+            </td>
+          </tr>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <%= will_paginate @companies %>
+  </div>
+</div>

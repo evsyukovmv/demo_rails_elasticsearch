@@ -1,8 +1,5 @@
-# Place all the behaviors and hooks related to the matching controller here.
-# All this logic will automatically be available in application.js.
-# You can use CoffeeScript in this file: http://coffeescript.org/
-
-ready = ->
+offersTableReady =->
+  return false if $('.offers-table').length == 0
   $('#offers-search').typeahead {
     hint: true
     highlight: true
@@ -10,14 +7,14 @@ ready = ->
     async: true
   },
     source: (query, sync, async) ->
-      $.get '/offers/autocomplete', { query: query }, (data) ->
+      $.get '/offers/suggestions', { query: query }, (data) ->
         async data
 
-  $('.offers-search').bind 'typeahead:select', (e, suggestion) ->
+  $('#offers-search').bind 'typeahead:select', (e, suggestion) ->
     window.location.search = '?query=' + suggestion
     return true
 
-  $('.offers-search').keyup (e) ->
+  $('#offers-search').keyup (e) ->
     if e.keyCode == 13
       value = $(e.target).val()
       if value.length > 0
@@ -26,6 +23,8 @@ ready = ->
         window.location.search = ''
     return
 
+offersManageReady =->
+  return false if $('.offer-form').length == 0
   $('.customers-search').typeahead {
     hint: true
     highlight: true
@@ -43,5 +42,9 @@ ready = ->
     $('#offer_customer_id').val(suggestion.id)
     return true
 
-$(document).on('turbolinks:load', ready)
+offersReady = ->
+  offersTableReady()
+  offersManageReady()
+  
+$(document).on('turbolinks:load', offersReady)
 

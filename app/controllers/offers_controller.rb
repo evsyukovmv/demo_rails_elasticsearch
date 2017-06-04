@@ -1,7 +1,8 @@
 class OffersController < ApplicationController
   def index
     @query = params[:query]
-    @offers = @query.present? ? Offer.search("*#{@query}*").records : Offer.order(id: :desc)
+    @offers = Offer.search("*#{@query}*").records if @query.present?
+    @offers ||= Offer
     @offers = @offers.paginate(page: params[:page])
   end
 
@@ -37,7 +38,7 @@ class OffersController < ApplicationController
     redirect_to :root
   end
 
-  def autocomplete
+  def suggestions
     suggestions = Offer.suggest(params[:query])
     options = suggestions['suggestions'][0]['options']
     render json: options.map { |s| s['text'] }.uniq

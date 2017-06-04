@@ -1,0 +1,46 @@
+<div class="row">
+  <div class="col-md-8">
+    <h2>Customers</h1>
+  </div>
+  <div class="col-md-3">
+    <input type="text" value="<%= @query %>" id="customers-search" class="form-control typeahead input-search pull-right" placeholder="Search" />
+  </div>
+  <div class="col-md-1">
+    <%= link_to "Create", new_customer_path, class: 'create-customer create-item btn btn-primary pull-right' %>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <table class="table table-hover customers-table">
+      <thead>
+      <tr>
+        <th>Id</th>
+        <th>First name</th>
+        <th>Last name</th>
+        <th>Company</th>
+        <th>Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <% @customers.each do |customer| %>
+          <tr>
+            <td><%= customer.id %></td>
+            <td><%= customer.first_name %></td>
+            <td><%= customer.last_name %></td>
+            <td><%= customer.company.name %></td>
+            <td>
+              <%= link_to "Edit", edit_customer_path(customer.id), class: 'customer-edit' %>
+              |
+              <%= link_to 'Destroy', customer, method: :delete, class: 'customer-destroy' %>
+            </td>
+          </tr>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <%= will_paginate @customers %>
+  </div>
+</div>
