@@ -24,7 +24,7 @@
       </thead>
       <tbody>
       <% @offers.each do |offer| %>
-          <tr>
+          <tr class="row-offer-<%= offer.id %>">
             <td><%= offer.id %></td>
             <td><%= offer.title %></td>
             <td><%= offer.description %></td>

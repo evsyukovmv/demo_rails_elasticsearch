@@ -23,7 +23,7 @@
       </thead>
       <tbody>
       <% @customers.each do |customer| %>
-          <tr>
+          <tr class="row-customer-<%= customer.id %>">
             <td><%= customer.id %></td>
             <td><%= customer.first_name %></td>
             <td><%= customer.last_name %></td>

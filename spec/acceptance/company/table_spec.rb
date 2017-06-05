@@ -24,4 +24,17 @@ feature 'Companies list', js: true do
       expect(page).to have_content companies[0].name
     end
   end
+
+  scenario 'Visitor can delete company' do
+    visit companies_path
+    within '.companies-table' do
+      companies.each do |company|
+        expect(page).to have_content company.id
+        expect(page).to have_content company.name
+      end
+      find(".row-company-#{companies[0].id} .company-destroy").click
+      expect(page).not_to have_content companies[0].name
+      expect(page).to have_content companies[1].name
+    end
+  end
 end

@@ -26,4 +26,17 @@ feature 'Offers list', js: true do
       expect(page).to have_content offers[0].id
     end
   end
+
+  scenario 'Visitor can delete offer' do
+    visit root_path
+    within '.offers-table' do
+      offers.each do |offer|
+        expect(page).to have_content offer.id
+        expect(page).to have_content offer.title
+      end
+      find(".row-offer-#{offers[0].id} .offer-destroy").click
+      expect(page).not_to have_content offers[0].title
+      expect(page).to have_content offers[1].title
+    end
+  end
 end

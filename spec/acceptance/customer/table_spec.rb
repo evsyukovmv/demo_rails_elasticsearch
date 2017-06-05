@@ -24,4 +24,17 @@ feature 'Customers list', js: true do
       expect(page).to have_content customers[0].name
     end
   end
+
+  scenario 'Visitor can delete customer' do
+    visit customers_path
+    within '.customers-table' do
+      customers.each do |customer|
+        expect(page).to have_content customer.id
+        expect(page).to have_content customer.name
+      end
+      find(".row-customer-#{customers[0].id} .customer-destroy").click
+      expect(page).not_to have_content customers[0].name
+      expect(page).to have_content customers[1].name
+    end
+  end
 end
